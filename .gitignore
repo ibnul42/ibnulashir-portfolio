@@ -41,4 +41,9 @@ yarn-error.log*
 next-env.d.ts
 
 /requirements
-.PROGRESS.md
+
+# playwright
+/playwright-report/
+/test-results/
+/blob-report/
+/playwright/.cache/

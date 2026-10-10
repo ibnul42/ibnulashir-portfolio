@@ -1,26 +1,593 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ------------------------------------------------------------------------
+   Theme variants. The theme class lives on <html>; `dark:` follows it, not
+   the OS. Inside .keep-dark blocks (code windows, terminal) use tokens
+   rather than dark:/light: utilities — those blocks stay dark in both themes.
+   ------------------------------------------------------------------------ */
+@custom-variant dark (&:where(.theme-dark, .theme-dark *));
+@custom-variant light (&:where(.theme-light, .theme-light *));
+
+/* ------------------------------------------------------------------------
+   Design tokens — copied from requirements/design/*.dc.html.
+   ------------------------------------------------------------------------ */
+.theme-dark,
+.keep-dark {
+  --bg: #0a0912;
+  --surface: #13111d;
+  --surface-2: #1b1828;
+  --text: #f2f0ff;
+  --text-2: #cfcae6;
+  --text-3: #dcd8f0;
+  --muted: #a9a4c2;
+  --faint: #8a85a3;
+  --line: rgba(242, 240, 255, 0.08);
+  --line-2: rgba(242, 240, 255, 0.12);
+  --line-3: rgba(242, 240, 255, 0.22);
+  --header: rgba(10, 9, 18, 0.7);
+  --glass: rgba(19, 17, 29, 0.7);
+  --scrim: rgba(5, 4, 10, 0.62);
+  --lime: #c6ff3d;
+  --cyan: #2ee6ff;
+  --pink: #ff3d8b;
+  --amber: #ffb020;
+  --violet: #9b6bff;
+  --glow-lime: rgba(198, 255, 61, 0.55);
+  --glow-cyan: rgba(46, 230, 255, 0.55);
+  --glow-pink: rgba(255, 61, 139, 0.55);
+  --glow-amber: rgba(255, 176, 32, 0.55);
+  --glow-violet: rgba(155, 107, 255, 0.55);
+  --spot: rgba(198, 255, 61, 0.13);
+  --grid-a: rgba(198, 255, 61, 0.35);
+  --grid-b: rgba(46, 230, 255, 0.28);
+  --aurora: 0.36;
+  --polaroid: #f2f0ff;
+  /* Accent (fixed lime at launch). The design set these from script:
+     -ink is the readable accent for text/borders, -glow is for shadows. */
+  --accent: #c6ff3d;
+  --accent-ink: var(--accent);
+  --accent-glow: var(--accent);
+  color-scheme: dark;
 }
 
+.theme-light {
+  --bg: #f6f5fb;
+  --surface: #ffffff;
+  --surface-2: #efedf7;
+  --text: #15131f;
+  --text-2: #3e3a52;
+  --text-3: #2e2a40;
+  --muted: #5c5775;
+  --faint: #6b6684;
+  --line: rgba(21, 19, 31, 0.08);
+  --line-2: rgba(21, 19, 31, 0.12);
+  --line-3: rgba(21, 19, 31, 0.22);
+  --header: rgba(246, 245, 251, 0.78);
+  --glass: rgba(255, 255, 255, 0.72);
+  --scrim: rgba(21, 19, 31, 0.35);
+  --lime: #426b00;
+  --cyan: #006e86;
+  --pink: #d0105f;
+  --amber: #9e5a00;
+  --violet: #6a3fe0;
+  --glow-lime: transparent;
+  --glow-cyan: transparent;
+  --glow-pink: transparent;
+  --glow-amber: transparent;
+  --glow-violet: transparent;
+  --spot: rgba(106, 63, 224, 0.08);
+  --grid-a: rgba(106, 63, 224, 0.22);
+  --grid-b: rgba(0, 110, 134, 0.14);
+  --aurora: 0.26;
+  --polaroid: #ffffff;
+  --accent: #c6ff3d;
+  --accent-ink: #426b00;
+  --accent-glow: transparent;
+  color-scheme: light;
+}
+
+/* ------------------------------------------------------------------------
+   Tailwind theme. Default colours, breakpoints and animations are cleared
+   so only design tokens can be used (bg-surface, text-muted, border-line…).
+   ------------------------------------------------------------------------ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-*: initial;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--text);
+  --color-fg-2: var(--text-2);
+  --color-fg-3: var(--text-3);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-line-3: var(--line-3);
+  --color-header: var(--header);
+  --color-glass: var(--glass);
+  --color-scrim: var(--scrim);
+  --color-lime: var(--lime);
+  --color-cyan: var(--cyan);
+  --color-pink: var(--pink);
+  --color-amber: var(--amber);
+  --color-violet: var(--violet);
+  --color-glow-lime: var(--glow-lime);
+  --color-glow-cyan: var(--glow-cyan);
+  --color-glow-pink: var(--glow-pink);
+  --color-glow-amber: var(--glow-amber);
+  --color-glow-violet: var(--glow-violet);
+  --color-spot: var(--spot);
+  --color-grid-a: var(--grid-a);
+  --color-grid-b: var(--grid-b);
+  --color-polaroid: var(--polaroid);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-glow: var(--accent-glow);
+  /* Text on the lime accent button — same in both themes. */
+  --color-on-accent: #0a0912;
+
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, Menlo, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@theme {
+  /* The design's breakpoints. It writes them as max-width (e.g. ≤1000px is
+     mobile), so each min-width here is 1px above to match it exactly. */
+  --breakpoint-*: initial;
+  --breakpoint-xs: 23.8125rem; /*  381px: logo text shows */
+  --breakpoint-tab: 47.5625rem; /*  761px: .hide-sm content shows */
+  --breakpoint-aside: 60rem; /*  960px: sticky aside on Experience */
+  --breakpoint-nav: 62.5625rem; /* 1001px: desktop nav replaces mobile menu */
+  --breakpoint-label: 68.8125rem; /* 1101px: search button shows its label */
+  --breakpoint-clock: 73.8125rem; /* 1181px: header clock shows */
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-spring: cubic-bezier(0.3, 1.6, 0.4, 1);
+  --ease-menu: cubic-bezier(0.7, 0, 0.2, 1);
+
+  --animate-*: initial;
+  --animate-rise: rise 0.9s var(--ease-out) backwards;
+  --animate-blink: blink 1s steps(1) infinite;
+  --animate-spin: spin 14s linear infinite;
+  --animate-spin-border: spinBorder 6s linear infinite;
+  --animate-sweep: sweep 7s linear infinite;
+  --animate-aurora-1: aurora1 16s ease-in-out infinite;
+  --animate-aurora-2: aurora2 19s ease-in-out infinite;
+  --animate-aurora-3: aurora3 22s ease-in-out infinite;
+  --animate-grid-move: gridMove 1.6s linear infinite;
+  --animate-ping: ping 1.8s ease-out infinite;
+  --animate-flicker: flicker 5s infinite;
+}
+
+/* Stagger for entrance animations: animate-delay-1 … (120ms steps, as .d1–.d5). */
+@utility animate-delay-* {
+  animation-delay: calc(--value(integer) * 120ms);
+}
+
+/* Entrance on scroll; content stays visible where view timelines aren't supported. */
+@utility reveal {
+  @supports (animation-timeline: view()) {
+    animation: rise linear backwards;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Animated gradient text (headings, current mobile-menu link). */
+@utility grad-text {
+  background: linear-gradient(
+    90deg,
+    var(--lime),
+    var(--cyan),
+    var(--violet),
+    var(--pink),
+    var(--lime)
+  );
+  background-size: 220% 100%;
+  background-clip: text;
+  color: transparent;
+  animation: sweep 7s linear infinite;
+}
+
+/* ------------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------------ */
+@property --ang {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    overflow-x: clip;
+  }
+  ::selection {
+    background: #ff3d8b;
+    color: #0a0912;
+  }
+  a {
+    color: var(--text);
+  }
+  a:hover {
+    color: var(--lime);
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent-ink);
+    outline-offset: 3px;
+  }
+}
+
+/* Glitch heading: two offset copies of data-text in pink and cyan. */
+@layer components {
+  .glitch {
+    position: relative;
+    display: inline-block;
+  }
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    clip-path: inset(0 0 100% 0);
+  }
+  .glitch::before {
+    color: var(--pink);
+    animation: glitchA 4.5s infinite steps(1);
+  }
+  .glitch::after {
+    color: var(--cyan);
+    animation: glitchB 4.5s infinite steps(1);
+  }
+}
+
+/* ------------------------------------------------------------------------
+   Keyframes shared across pages. Page-specific ones (drawer, timeline,
+   time-zone picker…) are added with their components.
+   ------------------------------------------------------------------------ */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spinBorder {
+  to {
+    --ang: 360deg;
+  }
+}
+@keyframes sweep {
+  to {
+    background-position: 220% 0;
+  }
+}
+@keyframes knobSpin {
+  from {
+    transform: rotate(-120deg) scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes aurora1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(120px, 60px) scale(1.25);
+  }
+}
+@keyframes aurora2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1.1);
+  }
+  50% {
+    transform: translate(-140px, 40px) scale(0.85);
+  }
+}
+@keyframes aurora3 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(0.9);
+  }
+  50% {
+    transform: translate(60px, -80px) scale(1.2);
+  }
+}
+@keyframes gridMove {
+  to {
+    background-position:
+      0 64px,
+      0 0;
+  }
+}
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.6);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-560px) scale(1.2);
+  }
+}
+@keyframes glitchA {
+  0%,
+  86%,
+  100% {
+    clip-path: inset(0 0 100% 0);
+    transform: none;
+  }
+  87% {
+    clip-path: inset(10% 0 60% 0);
+    transform: translate(-6px, -2px);
+  }
+  89% {
+    clip-path: inset(55% 0 20% 0);
+    transform: translate(5px, 2px);
+  }
+  91% {
+    clip-path: inset(30% 0 45% 0);
+    transform: translate(-4px, 1px);
+  }
+  93% {
+    clip-path: inset(75% 0 5% 0);
+    transform: translate(6px, -1px);
+  }
+  95% {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+@keyframes glitchB {
+  0%,
+  87%,
+  100% {
+    clip-path: inset(0 0 100% 0);
+    transform: none;
+  }
+  88% {
+    clip-path: inset(65% 0 10% 0);
+    transform: translate(6px, 2px);
+  }
+  90% {
+    clip-path: inset(20% 0 55% 0);
+    transform: translate(-5px, -2px);
+  }
+  92% {
+    clip-path: inset(45% 0 30% 0);
+    transform: translate(4px, 1px);
+  }
+  94% {
+    clip-path: inset(5% 0 80% 0);
+    transform: translate(-6px, 0);
+  }
+  96% {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  47% {
+    opacity: 1;
+  }
+  48% {
+    opacity: 0.6;
+  }
+  49% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 0.85;
+  }
+  83% {
+    opacity: 1;
+  }
+}
+@keyframes ping {
+  0% {
+    box-shadow: 0 0 0 0 var(--c, #c6ff3d);
+  }
+  100% {
+    box-shadow: 0 0 0 12px transparent;
+  }
+}
+@keyframes progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+/* Mobile menu */
+@keyframes menuIn {
+  from {
+    clip-path: circle(0px at var(--ox, 100%) var(--oy, 0px));
+  }
+  to {
+    clip-path: circle(150% at var(--ox, 100%) var(--oy, 0px));
+  }
+}
+@keyframes menuOut {
+  from {
+    clip-path: circle(150% at var(--ox, 100%) var(--oy, 0px));
+  }
+  to {
+    clip-path: circle(0px at var(--ox, 100%) var(--oy, 0px));
+  }
+}
+@keyframes mIn {
+  from {
+    opacity: 0;
+    transform: translateY(42px) skewY(5deg);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+@keyframes spinIn {
+  from {
+    transform: rotate(-180deg) scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+/* Command palette */
+@keyframes palIn {
+  from {
+    opacity: 0;
+    transform: translateY(-18px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes palRow {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes palFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* Click sparks */
+@keyframes spA {
+  from {
+    transform: rotate(var(--a)) translateX(0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: rotate(var(--a)) translateX(var(--d, 44px)) scale(0.2);
+    opacity: 0;
+  }
+}
+@keyframes spB {
+  from {
+    transform: rotate(var(--a)) translateX(0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: rotate(var(--a)) translateX(var(--d, 44px)) scale(0.2);
+    opacity: 0;
+  }
+}
+@keyframes rgA {
+  from {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(7);
+    opacity: 0;
+  }
+}
+@keyframes rgB {
+  from {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(7);
+    opacity: 0;
+  }
+}
+/* Back-to-top button */
+@keyframes totopIn {
+  from {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(16px) scale(0.6);
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+}
+@keyframes ringProg {
+  from {
+    stroke-dashoffset: 163.4;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ------------------------------------------------------------------------
+   Reduced motion: the OS setting, or .motion-off on <html> (the palette's
+   "Reduce motion" toggle, T21/T22). Effects with no static meaning are hidden.
+   ------------------------------------------------------------------------ */
+.motion-off *,
+.motion-off *::before,
+.motion-off *::after {
+  animation: none !important;
+  transition: none !important;
+}
+.motion-off .glitch::before,
+.motion-off .glitch::after {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+  .glitch::before,
+  .glitch::after {
+    display: none !important;
+  }
 }
