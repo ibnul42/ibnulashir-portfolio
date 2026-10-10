@@ -3,10 +3,11 @@
 Tracks the 41 tickets from [requirements/Portfolio Implementation Plan.md](requirements/Portfolio%20Implementation%20Plan.md).
 Updated each time a subtask or ticket is finished.
 
-**Status:** Milestone 0 · Foundation — 5 / 41 tickets done · ~61.5h of ~67h left
+**Status:** Milestone 0 · Foundation — 5 / 41 tickets done (+ T06.1) · ~61h of ~67h left
 **Last updated:** 2026-10-11
 
 **How to read this**
+
 - Tickets of 2h or more, or with several separate pieces, are split into subtasks (`T08.1`, `T08.2`…) of about 1h or less. Each one can be built, checked and committed on its own (`T08.2: add NavLink with aria-current`).
 - A ticket is ticked when all its subtasks are done **and** its "Done when" from the plan passes.
 - 👤 = needs you (accounts, decisions, facts only you know). ⚠ = a fix to the plan from the review; apply it in that step.
@@ -14,22 +15,22 @@ Updated each time a subtask or ticket is finished.
 
 ---
 
-## ▶ Next up: T06.1 · Button + Chip
+## ▶ Next up: T06.2 · Card + SectionHeading
 
-First step of T06 · Base UI (~0.5h, depends on T04 ✅ T05 ✅). On the critical path: T06 → T08 → T10 → T13.
+Second step of T06 · Base UI (~0.5h, needs T04 ✅ T05 ✅). On the critical path.
 
-1. `components/ui/Button.tsx`: port `.btn`, `.btn-acc` (primary) and `.btn-line` (ghost) from `requirements/design/Ink.dc.html`: shine sweep (`::after`), hover lift, glow. One component that renders `next/link` when given `href`, otherwise `<button>`.
-2. `components/ui/Chip.tsx`: the small mono tag pill used on cards and filters.
-3. Server Components, tokens only, classes merged with `cn`. Add both to `/styleguide`.
+1. `components/ui/Card.tsx`: port `.wcard` from `requirements/design/Ink.dc.html`: 1.5px conic border (`--ang` + `spinBorder` on hover), the `--mx`/`--my` spotlight (`--spot`), hover lift and pink shadow. Polymorphic like `Button` (`<article>` / link). The pointer-tracking that sets `--mx`/`--my` is a client effect, so leave it at the default position for now (T30).
+2. `components/ui/SectionHeading.tsx`: mono eyebrow + big title (e.g. "The whole stack," / "Career log" on Home). Takes the heading level (`h1`/`h2`) as a prop, so each page keeps exactly one `h1`.
+3. Add both to `BaseUiDemo` (shown on `/` and `/styleguide`).
 
-**Done when:** both variants look like the canvas in both themes (Flip button) and have a visible focus ring.
+**Done when:** the card's border spins on hover and the heading sizes match the canvas, in both themes.
 
-Then T06.2 (Card + SectionHeading) and T06.3 (CodeWindow frame). T07 is also unblocked; T08 needs T06 and T07.
+Then T06.3 (CodeWindow frame). T07.1 is also ready.
 
 **Before you go on:**
-- 👤 Check `/styleguide` against the canvas by eye (`npm run dev`, Flip theme). T04/T05 haven't been checked visually yet.
+
+- 👤 Check T06.1 on `/` against the canvas (`npm run dev`, Flip theme, hover the buttons, Tab for the focus ring). T04/T05 also still need a visual check on `/styleguide`.
 - 👤 Confirm T03's "Done when": a PR shows a working Vercel preview URL.
-- 👤 `PROGRESS.md` is in `.gitignore` but still tracked. To take it out of the repo: `git rm --cached PROGRESS.md`.
 - 👤 Your Node is 25.9 (not an LTS release). Vercel builds on Node 22/24. Node 24 LTS locally would match it and allow Vitest 5.
 - 👤 Buy the domain soon. DNS and Search Console take time (T38/T41).
 
@@ -41,7 +42,8 @@ Every ticket and subtask lists **needs:** the earlier work that must be finished
 A ticket's own **needs** comes from the plan; a subtask's is the narrower part of it that it really uses, so some subtasks can start before their whole ticket is unblocked.
 
 **Ready now** (everything they need is done):
-- T06.1 · T06.2 · T06.3 (Base UI): critical path, do these first
+
+- T06.2 · T06.3 (Base UI): critical path, do these first
 - T07.1 (theme provider)
 - T10.4 (BackToTop) · T10.5 (`/cv` redirect)
 - T11.1 (content types) → then T11.2–T11.4
@@ -61,7 +63,7 @@ A ticket's own **needs** comes from the plan; a subtask's is the narrower part o
 - [x] T04 · Design tokens in `globals.css` — 2026-10-11 (visual check pending, see above) · needs: T01
 - [x] T05 · Fonts (Archivo + JetBrains Mono) — 2026-10-11 · needs: T04
 - [ ] **T06 · Base UI** (1.5h) · needs: T04, T05
-  - [ ] T06.1 · `Button` (primary, ghost) + `Chip` (0.5h) · needs: T04, T05
+  - [x] T06.1 · `Button` (primary, ghost) + `Chip` (0.5h) · needs: T04, T05 — 2026-10-11
   - [ ] T06.2 · `Card` (conic border, spotlight) + `SectionHeading` (0.5h) · needs: T04, T05
   - [ ] T06.3 · `CodeWindow` frame: chrome, file tab, `.keep-dark` body (0.5h) · needs: T04, T05
 - [ ] **T07 · Dark/light mode** (2.5h) · needs: T04
@@ -191,6 +193,7 @@ A ticket's own **needs** comes from the plan; a subtask's is the narrower part o
 ### T01 · Scaffold the Next.js app — 2026-10-10
 
 **Done**
+
 - `create-next-app@16.4.0`: TypeScript, Tailwind v4, App Router, ESLint, `@/*` alias, no `src/`, Turbopack (default), Cache Components on, `AGENTS.md` included.
 - Versions: next 16.4.0, react 19.3.0, tailwindcss 4.3.3.
 - `tsconfig.json`: added `noUncheckedIndexedAccess`.
@@ -198,18 +201,21 @@ A ticket's own **needs** comes from the plan; a subtask's is the narrower part o
 - `git init` on `main`. Nothing committed yet.
 
 **Checks**
+
 - `npm run build` ✅ (`/` prerendered static)
 - `npm run dev` ✅ (`/` returns 200)
 - `npm run lint` ✅
 - `tsc --noEmit` ✅ after `next typegen` (see adjustment for T02)
 
 **Notes**
+
 - Scaffolded in a subfolder then moved up, because `create-next-app` won't run in a folder that already has `requirements/`.
 - Tailwind is wired through the `@tailwindcss/turbopack` loader in `next.config.ts` (new in 16.4), not PostCSS.
 
 ### T02 · Tooling — 2026-10-11
 
 **Done**
+
 - Runtime: `clsx`, `tailwind-merge`. Dev: `prettier`, `prettier-plugin-tailwindcss`, `vitest`, `@playwright/test`, `@axe-core/playwright`.
 - `lib/cn.ts` + `tests/unit/cn.test.ts` (3 tests).
 - `vitest.config.ts`: Node environment, `@/` alias, runs `tests/unit/**/*.test.ts`. No jsdom: unit tests cover plain logic, Playwright covers UI.
@@ -221,6 +227,7 @@ A ticket's own **needs** comes from the plan; a subtask's is the narrower part o
 **Checks:** `lint` ✅ · `typecheck` ✅ · `test` ✅ 3/3 · `format:check` ✅
 
 **Notes**
+
 - Vitest is **4.1**, not 5. Vitest 5 needs `@types/node` ≥ 22 and doesn't list Node 25 as supported. Move to Node 24 LTS to upgrade.
 - Playwright browsers aren't downloaded yet. Run `npx playwright install chromium` before T34.
 - Prettier also skips gitignored files (`requirements/`, `PROGRESS.md`).
@@ -233,6 +240,7 @@ Done by you: `github.com/ibnul42/ibnulashir-portfolio`, initial commit `7621bd0`
 ### T04 · Design tokens — 2026-10-11
 
 **Done** (`app/globals.css`)
+
 - Every token from the design, for `.theme-dark`/`.keep-dark` and `.theme-light`, including Work's `--scrim`, plus the accent trio the guide was missing.
 - `dark:` / `light:` variants follow the class on `<html>`.
 - `@theme inline` maps tokens to utilities. **Tailwind's default colours, breakpoints and animations are cleared**, so only tokens work. `bg-red-500` simply won't generate.
@@ -249,10 +257,33 @@ Done by you: `github.com/ibnul42/ibnulashir-portfolio`, initial commit `7621bd0`
 ### T05 · Fonts — 2026-10-11
 
 **Done**
+
 - `app/fonts.ts`: Archivo and JetBrains Mono via `next/font/google`, variable weights, `display: swap`, exposed as `--font-archivo` / `--font-jetbrains` → Tailwind `font-sans` / `font-mono`.
 - `app/layout.tsx`: font variables + `theme-dark` on `<html>`; Geist removed.
 
 **Checks:** both fonts self-hosted and preloaded (`Link: rel=preload` header); `next/font` adds size-matched fallbacks, so no layout shift from font loading.
 
 **Notes**
+
 - Archivo's **width axis is not loaded** (deviation from the plan): the design never uses `font-stretch`/`wdth`, so it would only add bytes. Add `axes: ["wdth"]` in `app/fonts.ts` if a design ever needs it.
+
+### T06.1 · Button + Chip — 2026-10-11
+
+**Done**
+
+- `components/ui/Button.tsx`: `primary` (`.btn-acc`) and `ghost` (`.btn-line`) with the hover lift, glow and light sweep. Renders `next/link` for internal paths, `<a>` for external links, downloads and `target`, and `<button type="button">` with no `href`. `buttonClasses()` is exported for anything that needs the look without the component.
+- `components/ui/Chip.tsx`: `tag` (small, optional coloured square with optional glow) and `tool` (larger stack pill). Static only; the pressable skill-filter chips are T27.
+- `lib/tone.ts`: the five neon tone names + class maps. Content (T11) will use these names instead of hex.
+- New tokens in `globals.css`: `--accent-edge` (primary button border, darker in light mode as in the design) and `--color-shine` (the hover sweep).
+- `app/styleguide/BaseUiDemo.tsx`: every variant, shown on `/` (temporary, until T13) and `/styleguide`.
+
+**Checks:** `lint` ✅ · `typecheck` ✅ · `test` ✅ · `format:check` ✅ · `build` ✅ · compiled CSS has every button/chip rule · `next start`: `/` renders internal links as `<a href="/…">`, the external link with `target="_blank" rel="noopener"`, and buttons with `type="button"`.
+
+**Fixes found on the way**
+
+- **T04 correction:** Tailwind's reset sets `line-height: 1.5`; the design never sets one (browser `normal`). `html` now uses `line-height: normal`, so text blocks aren't taller than the canvas.
+- tailwind-merge drops an earlier `leading-*` when a later `text-[size]` class appears. Avoid combining them in one `cn()` call, or use the `text-[11px]/[1.4]` form.
+
+**Not yet checked:** by eye against the canvas (no browser connected).
+
+**Note:** `Button` with `href="/cv"` would render `next/link`, which tries client navigation to a redirect. Pass `download` or `target="_blank"` for the CV so it renders a plain `<a>` (T10.5).

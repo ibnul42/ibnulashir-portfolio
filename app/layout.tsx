@@ -10,7 +10,6 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    // theme-dark is the default; next-themes takes over the class in T07.
     <html lang="en" className={cn(archivo.variable, jetbrains.variable, "theme-dark antialiased")}>
       <body className="min-h-dvh">{children}</body>
     </html>

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { BaseUiDemo } from "./BaseUiDemo";
 import { ThemeFlip } from "./ThemeFlip";
 
-// Dev page for checking tokens and fonts (T04/T05); T06 adds the base UI here.
+// Dev page for checking tokens, fonts (T04/T05) and the base UI (T06).
 // Available locally and on Vercel previews, never on production.
 export const metadata: Metadata = { title: "Styleguide", robots: { index: false } };
 
@@ -84,6 +85,8 @@ export default function StyleguidePage() {
           />
         </div>
       </section>
+
+      <BaseUiDemo />
 
       <section className="keep-dark rounded-2xl border border-line-2 bg-bg p-6 font-mono text-sm text-fg">
         <p className="text-muted">{"// .keep-dark stays dark in both themes"}</p>

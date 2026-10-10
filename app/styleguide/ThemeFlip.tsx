@@ -1,7 +1,5 @@
 "use client";
 
-// Temporary: flips the <html> theme class by hand so the tokens can be checked.
-// Replaced by the real ThemeToggle in T07.
 export function ThemeFlip() {
   const flip = () => {
     const root = document.documentElement;

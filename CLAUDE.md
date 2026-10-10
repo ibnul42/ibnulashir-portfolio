@@ -30,6 +30,8 @@ When a subtask or ticket is finished:
 - Breakpoints (min-width, 1px above the design's max-width queries): `xs` 381, `tab` 761, `aside` 960, `nav` 1001, `label` 1101, `clock` 1181. Use `max-nav:` for mobile-only.
 - `.keep-dark` blocks stay dark in both themes: use tokens inside them, never `dark:`/`light:`.
 - Animations: `animate-rise`, `animate-delay-N` (120ms steps), `reveal`, `grad-text`, `.glitch`. Add page-specific keyframes with their component, renamed if the name clashes (see PROGRESS.md).
+- Neon colours are referenced by name (`Tone` in `lib/tone.ts`), never hex. Reuse `components/ui/` (`Button`, `Chip`…) before writing new styles.
+- tailwind-merge drops an earlier `leading-*` when a later `text-[size]` is in the same `cn()`; use `text-[size]/[leading]` instead.
 - `/styleguide` is a dev page. Add new UI pieces there to check them in both themes.
 
 ## Rules

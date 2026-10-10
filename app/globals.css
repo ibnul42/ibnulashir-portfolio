@@ -47,6 +47,7 @@
   --accent: #c6ff3d;
   --accent-ink: var(--accent);
   --accent-glow: var(--accent);
+  --accent-edge: var(--accent); /* border of the filled accent button */
   color-scheme: dark;
 }
 
@@ -83,6 +84,7 @@
   --accent: #c6ff3d;
   --accent-ink: #426b00;
   --accent-glow: transparent;
+  --accent-edge: rgba(21, 19, 31, 0.18);
   color-scheme: light;
 }
 
@@ -123,8 +125,11 @@
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
   --color-accent-glow: var(--accent-glow);
+  --color-accent-edge: var(--accent-edge);
   /* Text on the lime accent button — same in both themes. */
   --color-on-accent: #0a0912;
+  /* Light sweep across buttons on hover — same in both themes. */
+  --color-shine: rgba(255, 255, 255, 0.55);
 
   --font-sans: var(--font-archivo), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, Menlo, monospace;
@@ -201,6 +206,8 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* The design never sets a base line-height; Tailwind's reset uses 1.5. */
+    line-height: normal;
   }
   body {
     background: var(--bg);
