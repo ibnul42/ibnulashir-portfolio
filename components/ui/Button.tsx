@@ -1,6 +1,6 @@
-import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/lib/cn";
+import { SmartLink } from "./SmartLink";
 
 export type ButtonVariant = "primary" | "ghost";
 
@@ -41,19 +41,8 @@ export function buttonClasses(variant: ButtonVariant = "primary", className?: st
 
 export function Button(props: ButtonProps) {
   if (props.href !== undefined) {
-    const { variant, className, href, children, ...rest } = props;
-    const classes = buttonClasses(variant, className);
-    const isPage = href.startsWith("/") && rest.download === undefined && rest.target === undefined;
-
-    return isPage ? (
-      <Link href={href} className={classes} {...rest}>
-        {children}
-      </Link>
-    ) : (
-      <a href={href} className={classes} {...rest}>
-        {children}
-      </a>
-    );
+    const { variant, className, ...rest } = props;
+    return <SmartLink className={buttonClasses(variant, className)} {...rest} />;
   }
 
   const { variant, className, children, type = "button", ...rest } = props;

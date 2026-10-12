@@ -253,6 +253,34 @@
     color: var(--cyan);
     animation: glitchB 4.5s infinite steps(1);
   }
+
+  /* Card with a conic border that spins on hover, and a spotlight at --mx/--my.
+     Default sweep is Home's .wcard; set --tone for Work's single-colour .pcard. */
+  .neon-card {
+    --card-sweep:
+      var(--line-2) 0deg 200deg, var(--accent) 255deg, #ff3d8b 295deg, #2ee6ff 325deg,
+      var(--line-2) 350deg;
+    --card-shadow: rgba(255, 61, 139, 0.5);
+    position: relative;
+    border: 1.5px solid transparent;
+    background:
+      radial-gradient(380px circle at var(--mx, 50%) var(--my, -30%), var(--spot), transparent 60%)
+        padding-box,
+      linear-gradient(var(--surface), var(--surface)) padding-box,
+      conic-gradient(from var(--ang), var(--card-sweep)) border-box;
+    transition:
+      transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+      box-shadow 0.45s;
+  }
+  .neon-card[data-tone] {
+    --card-sweep: var(--line-2) 0deg 190deg, var(--tone) 260deg, var(--line-2) 340deg;
+    --card-shadow: var(--tone);
+  }
+  .neon-card:hover {
+    transform: translateY(-6px);
+    animation: spinBorder 2.6s linear infinite;
+    box-shadow: 0 30px 60px -30px var(--card-shadow);
+  }
 }
 
 /* ------------------------------------------------------------------------

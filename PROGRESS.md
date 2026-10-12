@@ -3,7 +3,7 @@
 Tracks the 41 tickets from [requirements/Portfolio Implementation Plan.md](requirements/Portfolio%20Implementation%20Plan.md).
 Updated each time a subtask or ticket is finished.
 
-**Status:** Milestone 0 · Foundation — 5 / 41 tickets done (+ T06.1) · ~61h of ~67h left
+**Status:** Milestone 0 · Foundation — 5 / 41 tickets done (+ T06.1, T06.2) · ~60.5h of ~67h left
 **Last updated:** 2026-10-11
 
 **How to read this**
@@ -15,21 +15,26 @@ Updated each time a subtask or ticket is finished.
 
 ---
 
-## ▶ Next up: T06.2 · Card + SectionHeading
+## ▶ Next up: T06.3 · CodeWindow frame
 
-Second step of T06 · Base UI (~0.5h, needs T04 ✅ T05 ✅). On the critical path.
+Last step of T06 · Base UI (~0.5h, needs T04 ✅ T05 ✅). Finishing it completes T06 and, with T07, unblocks the header (T08).
 
-1. `components/ui/Card.tsx`: port `.wcard` from `requirements/design/Ink.dc.html`: 1.5px conic border (`--ang` + `spinBorder` on hover), the `--mx`/`--my` spotlight (`--spot`), hover lift and pink shadow. Polymorphic like `Button` (`<article>` / link). The pointer-tracking that sets `--mx`/`--my` is a client effect, so leave it at the default position for now (T30).
-2. `components/ui/SectionHeading.tsx`: mono eyebrow + big title (e.g. "The whole stack," / "Career log" on Home). Takes the heading level (`h1`/`h2`) as a prop, so each page keeps exactly one `h1`.
-3. Add both to `BaseUiDemo` (shown on `/` and `/styleguide`).
+The design uses one frame for two things (`requirements/design/Ink.dc.html`, lines ~351 and ~524):
 
-**Done when:** the card's border spins on hover and the heading sizes match the canvas, in both themes.
+1. `.neon-frame` in `globals.css`: 1.5px padding, radius 18px, a conic rainbow that spins all the time (`spinBorder 6s`), violet/cyan outer glow.
+2. `components/ui/CodeWindow.tsx`: `.keep-dark` body (radius 16.5px), title bar (`#100E19`, bottom `line` border) with three traffic dots (pink, amber, lime) and a mono title on the right (e.g. `~/ibnul-ashir`, `zsh — ibnul@dhaka`), then `children`.
+   - `variant="editor"`: body `#13111D`, glowing dots (Home code window).
+   - `variant="terminal"`: body `#07060C`, plain dots (Home "Let's build" terminal).
+   - Add the new body/title-bar colours as tokens (e.g. `--term-bg`, `--chrome-bg`) inside `.keep-dark`, not as hex in the component.
+3. Window chrome only: tabs, typing and terminal input come in T23/T24. Add both variants to `BaseUiDemo`.
 
-Then T06.3 (CodeWindow frame). T07.1 is also ready.
+**Done when:** both variants look the same as the canvas in dark and light (they stay dark in light mode), and the frame's border spins.
+
+Then T07.1 (theme provider), which is also ready.
 
 **Before you go on:**
 
-- 👤 Check T06.1 on `/` against the canvas (`npm run dev`, Flip theme, hover the buttons, Tab for the focus ring). T04/T05 also still need a visual check on `/styleguide`.
+- 👤 Check T06.1 on `/` against the canvas (hover the buttons, Tab for the focus ring). I've now checked T06.2 in Chrome; T04/T05 still need a look on `/styleguide`.
 - 👤 Confirm T03's "Done when": a PR shows a working Vercel preview URL.
 - 👤 Your Node is 25.9 (not an LTS release). Vercel builds on Node 22/24. Node 24 LTS locally would match it and allow Vitest 5.
 - 👤 Buy the domain soon. DNS and Search Console take time (T38/T41).
@@ -43,7 +48,7 @@ A ticket's own **needs** comes from the plan; a subtask's is the narrower part o
 
 **Ready now** (everything they need is done):
 
-- T06.2 · T06.3 (Base UI): critical path, do these first
+- T06.3 (CodeWindow frame): critical path, do this first
 - T07.1 (theme provider)
 - T10.4 (BackToTop) · T10.5 (`/cv` redirect)
 - T11.1 (content types) → then T11.2–T11.4
@@ -64,7 +69,7 @@ A ticket's own **needs** comes from the plan; a subtask's is the narrower part o
 - [x] T05 · Fonts (Archivo + JetBrains Mono) — 2026-10-11 · needs: T04
 - [ ] **T06 · Base UI** (1.5h) · needs: T04, T05
   - [x] T06.1 · `Button` (primary, ghost) + `Chip` (0.5h) · needs: T04, T05 — 2026-10-11
-  - [ ] T06.2 · `Card` (conic border, spotlight) + `SectionHeading` (0.5h) · needs: T04, T05
+  - [x] T06.2 · `Card` (conic border, spotlight) + `SectionHeading` (0.5h) · needs: T04, T05 — 2026-10-11
   - [ ] T06.3 · `CodeWindow` frame: chrome, file tab, `.keep-dark` body (0.5h) · needs: T04, T05
 - [ ] **T07 · Dark/light mode** (2.5h) · needs: T04
   - [ ] T07.1 · `next-themes` provider in `app/providers.tsx`; remove the hard-coded `theme-dark` from `<html>`. Check: no flash on reload, persists, syncs across tabs (0.75h) · needs: T04
@@ -287,3 +292,29 @@ Done by you: `github.com/ibnul42/ibnulashir-portfolio`, initial commit `7621bd0`
 **Not yet checked:** by eye against the canvas (no browser connected).
 
 **Note:** `Button` with `href="/cv"` would render `next/link`, which tries client navigation to a redirect. Pass `download` or `target="_blank"` for the CV so it renders a plain `<a>` (T10.5).
+
+### T06.2 · Card + SectionHeading — 2026-10-11
+
+**Done**
+
+- `components/ui/Card.tsx`: one component for both card styles in the design. Without `tone` it's Home's `.wcard` (lime → pink → cyan sweep, pink hover shadow); with `tone` it's Work's `.pcard` (single-colour sweep and shadow). Renders `<article>`, or a link when given `href`. Adds `group`, so children can react to hover (e.g. the `↗` arrow).
+- `.neon-card` in `globals.css`: the layered background (spotlight at `--mx`/`--my`, surface fill, conic border) is too complex for utilities. The spotlight sits at its default position until the pointer effect in T30.
+- `components/ui/SectionHeading.tsx`: coloured mono eyebrow + `clamp(36px, 5vw, 70px)` title with `grad-text` highlights, optional right-hand `action`, wrapped in `reveal`. `as="h1"` for page titles.
+- `components/ui/SmartLink.tsx`: the internal-vs-external link choice, now shared by `Button` and `Card` (`Button` refactored to use it).
+- `lib/tone.ts`: added `toneText` and `toneVar` maps.
+- Both added to `BaseUiDemo` (`/` and `/styleguide`).
+
+**Checks:** `lint` ✅ · `typecheck` ✅ · `test` ✅ · `format:check` ✅ · `build` ✅ · compiled CSS has `.neon-card`, its `[data-tone]` and hover rules, the tone vars and the clamp heading size.
+
+**Checked in Chrome (1920px)** against `requirements/design/Ink.dc.html`:
+
+- Resting Home card: lime at the bottom-left fading to pink and cyan up the left edge, same as the canvas.
+- Hover: lift, spinning border, pink shadow, arrow moves up-right. Work-style cards cast a shadow in their own tone.
+- Headings: eyebrow colour, size, gradient highlight and right-aligned action all match.
+- Light theme: white card surfaces, darker gradient, violet spotlight.
+- No console errors or hydration warnings.
+
+**Notes**
+
+- The demo cards borrow Home's content; tone-coloured labels and folder icons are T13 content.
+- The VS Code Tailwind extension suggests spacing-scale names for pixel values (`min-h-[290px]` → `min-h-72.5`). Pixel values are kept on purpose, so they read straight against the design CSS.

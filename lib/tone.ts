@@ -9,6 +9,22 @@ export const toneBg: Record<Tone, string> = {
   violet: "bg-violet",
 };
 
+export const toneText: Record<Tone, string> = {
+  lime: "text-lime",
+  cyan: "text-cyan",
+  pink: "text-pink",
+  amber: "text-amber",
+  violet: "text-violet",
+};
+
+export const toneVar: Record<Tone, string> = {
+  lime: "[--tone:var(--lime)]",
+  cyan: "[--tone:var(--cyan)]",
+  pink: "[--tone:var(--pink)]",
+  amber: "[--tone:var(--amber)]",
+  violet: "[--tone:var(--violet)]",
+};
+
 export const toneGlow: Record<Tone, string> = {
   lime: "shadow-[0_0_8px_var(--lime)]",
   cyan: "shadow-[0_0_8px_var(--cyan)]",
